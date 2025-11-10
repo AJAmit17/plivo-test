@@ -19,11 +19,18 @@ export function getPlivoClient(): PlivoResilient {
         const authId = process.env.PLIVO_AUTH_ID;
         const authToken = process.env.PLIVO_AUTH_TOKEN;
         const defaultPhoneNumber = process.env.PLIVO_PHONE_NUMBER;
-        const appBaseUrl = process.env.APP_BASE_URL || process.env.NEXT_PUBLIC_APP_BASE_URL;
+        const appBaseUrl = process.env.APP_BASE_URL;
 
         if (!authId || !authToken || !defaultPhoneNumber || !appBaseUrl) {
+            const missingVars = [];
+            if (!authId) missingVars.push('PLIVO_AUTH_ID');
+            if (!authToken) missingVars.push('PLIVO_AUTH_TOKEN');
+            if (!defaultPhoneNumber) missingVars.push('PLIVO_PHONE_NUMBER');
+            if (!appBaseUrl) missingVars.push('APP_BASE_URL');
+            
             throw new Error(
-                'Missing required Plivo environment variables: PLIVO_AUTH_ID, PLIVO_AUTH_TOKEN, PLIVO_PHONE_NUMBER, APP_BASE_URL'
+                `Missing required Plivo environment variables: ${missingVars.join(', ')}. ` +
+                'Please add them to your .env.local file.'
             );
         }
 

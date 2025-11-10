@@ -11,19 +11,11 @@ import { getUser } from '@/lib/supabase';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { callUuid: string } }
+    { params }: { params: Promise<{ callUuid: string }> }
 ) {
     try {
-        // Check authentication
-        // const user = await getUser();
-        // if (!user) {
-        //     return NextResponse.json(
-        //         { error: 'Unauthorized' },
-        //         { status: 401 }
-        //     );
-        // }
-
-        const { callUuid } = params;
+        // Await params in Next.js 15+
+        const { callUuid } = await params;
 
         if (!callUuid) {
             return NextResponse.json(
